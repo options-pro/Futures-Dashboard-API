@@ -140,3 +140,55 @@ def top_lc(request):
         jsonData = json.loads(data)
         os.remove(path + '/Top_lc.json') 
         return Response(jsonData)
+
+@api_view(['GET'])
+def top_sb(request):
+
+    path = os.getcwd() + '/Data/'
+    location = path+'/'+"Analysis.csv"
+    files = os.path.join(location)
+    files = glob.glob(files)
+    df = pd.concat(map(pd.read_csv, files), ignore_index=True)
+    df.drop('OPEN_INT', inplace=True, axis=1)
+    df.drop('CLOSE', inplace=True, axis=1)
+    df.drop('Quantity/Trades', inplace=True, axis=1)
+    df.drop(df[(df['OI_Trend'] != 'Short Build Up')].index, inplace=True)
+    df.drop('OI_Trend', inplace=True, axis=1)
+    df["Short Buildup"] = df["%_Price_change"] * df["%_OI_change"] * -1
+    sorted_df = df. sort_values(by=["Short Buildup"], ascending=False)
+    sorted_df.drop('Short Buildup', inplace=True, axis=1)
+
+    if request.method == 'GET':
+        sorted_df = sorted_df.head(5)
+        location_j = path + '/Top_sb.json'
+        sorted_df.to_json(path + '/Top_sb.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
+        data = open(path + '/Top_sb.json').read()
+        jsonData = json.loads(data)
+        os.remove(path + '/Top_sb.json') 
+        return Response(jsonData)
+
+@api_view(['GET'])
+def top_sc(request):
+
+    path = os.getcwd() + '/Data/'
+    location = path+'/'+"Analysis.csv"
+    files = os.path.join(location)
+    files = glob.glob(files)
+    df = pd.concat(map(pd.read_csv, files), ignore_index=True)
+    df.drop('OPEN_INT', inplace=True, axis=1)
+    df.drop('CLOSE', inplace=True, axis=1)
+    df.drop('Quantity/Trades', inplace=True, axis=1)
+    df.drop(df[(df['OI_Trend'] != 'Short Covering')].index, inplace=True)
+    df.drop('OI_Trend', inplace=True, axis=1)
+    df["Short Coverup"] = df["%_Price_change"] * df["%_OI_change"] * -1
+    sorted_df = df. sort_values(by=["Short Coverup"], ascending=False)
+    sorted_df.drop('Short Coverup', inplace=True, axis=1)
+
+    if request.method == 'GET':
+        sorted_df = sorted_df.head(5)
+        location_j = path + '/Top_sc.json'
+        sorted_df.to_json(path + '/Top_sc.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
+        data = open(path + '/Top_sc.json').read()
+        jsonData = json.loads(data)
+        os.remove(path + '/Top_sc.json') 
+        return Response(jsonData)

@@ -23,4 +23,6 @@ urlpatterns = [
     path('toi', views.top_oi),
     path('tlb', views.top_lb),
     path('tlc', views.top_lc),
+    path('tsb', views.top_sb),
+    path('tsc', views.top_sc),
 ]
