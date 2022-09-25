@@ -10,9 +10,17 @@ import os
 import glob
 
 @api_view(['GET'])
+def invalid(request):
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
 def top_price(request):
 
-    path = 'C:/Users/Abhay/Downloads/Market/'
+    if request.GET.get("value", None) is not None :
+        value = request.GET.get('value')
+    else:
+        value = ''
+    path = os.getcwd() + '/Data/'
     location = path+'/'+"Analysis.csv"
     files = os.path.join(location)
     files = glob.glob(files)
@@ -23,18 +31,30 @@ def top_price(request):
     df.drop('Quantity/Trades', inplace=True, axis=1)
     df.drop('OI_Trend', inplace=True, axis=1)
     sorted_df = df. sort_values(by=["Price_change"], ascending=False)
-    sorted_df = sorted_df.head(5)
     # location = path + '/Top_Price_Gainers.csv'
     # sorted_df.to_csv(location,index=False)
 
     if request.method == 'GET':
-        location_j = path + '/Top_PriceGainers.json'
-        # csv_to_json(location,location_j)
-        sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-        data = open(path + '/Top_PriceGainers.json').read()
-        jsonData = json.loads(data)
-        os.remove(path + '/Top_PriceGainers.json') 
-        return Response(jsonData)
+        if(value == 'gainers'):
+            sorted_df = sorted_df.head(5)
+            location_j = path + '/Top_PriceGainers.json'
+            # csv_to_json(location,location_j)
+            sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
+            data = open(path + '/Top_PriceGainers.json').read()
+            jsonData = json.loads(data)
+            os.remove(path + '/Top_PriceGainers.json') 
+            return Response(jsonData)
+        elif(value == 'losers'):
+            sorted_df = sorted_df.tail(5)
+            location_j = path + '/Top_PriceGainers.json'
+            # csv_to_json(location,location_j)
+            sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
+            data = open(path + '/Top_PriceGainers.json').read()
+            jsonData = json.loads(data)
+            os.remove(path + '/Top_PriceGainers.json') 
+            return Response(jsonData)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 def csv_to_json(csv_file_path, json_file_path):
     #create a dictionary
