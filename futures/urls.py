@@ -21,4 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tp', views.top_price),
     path('toi', views.top_oi),
+    path('tlb', views.top_lb),
+    path('tlc', views.top_lc),
 ]
