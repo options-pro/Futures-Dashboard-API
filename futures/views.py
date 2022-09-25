@@ -42,6 +42,7 @@ def top_price(request):
             return Response(jsonData)
         elif(value == 'losers'):
             sorted_df = sorted_df.tail(5)
+            sorted_df = sorted_df.loc[::-1]
             location_j = path + '/Top_PriceGainers.json'
             # csv_to_json(location,location_j)
             sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
@@ -85,6 +86,7 @@ def top_oi(request):
             return Response(jsonData)
         elif(value == 'losers'):
             sorted_df = sorted_df.tail(5)
+            sorted_df = sorted_df.loc[::-1]
             location_j = path + '/Top_PriceGainers.json'
             # csv_to_json(location,location_j)
             sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
