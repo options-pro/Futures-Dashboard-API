@@ -10,10 +10,6 @@ import os
 import glob
 
 @api_view(['GET'])
-def invalid(request):
-    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
 def top_price(request):
 
     if request.GET.get("value", None) is not None :
@@ -30,7 +26,50 @@ def top_price(request):
     df.drop('%_OI_change', inplace=True, axis=1)
     df.drop('Quantity/Trades', inplace=True, axis=1)
     df.drop('OI_Trend', inplace=True, axis=1)
-    sorted_df = df. sort_values(by=["Price_change"], ascending=False)
+    sorted_df = df. sort_values(by=["%_Price_change"], ascending=False)
+    # location = path + '/Top_Price_Gainers.csv'
+    # sorted_df.to_csv(location,index=False)
+
+    if request.method == 'GET':
+        if(value == 'gainers'):
+            sorted_df = sorted_df.head(5)
+            location_j = path + '/Top_PriceGainers.json'
+            # csv_to_json(location,location_j)
+            sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
+            data = open(path + '/Top_PriceGainers.json').read()
+            jsonData = json.loads(data)
+            os.remove(path + '/Top_PriceGainers.json') 
+            return Response(jsonData)
+        elif(value == 'losers'):
+            sorted_df = sorted_df.tail(5)
+            location_j = path + '/Top_PriceGainers.json'
+            # csv_to_json(location,location_j)
+            sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
+            data = open(path + '/Top_PriceGainers.json').read()
+            jsonData = json.loads(data)
+            os.remove(path + '/Top_PriceGainers.json') 
+            return Response(jsonData)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def top_oi(request):
+
+    if request.GET.get("value", None) is not None :
+        value = request.GET.get('value')
+    else:
+        value = ''
+    path = os.getcwd() + '/Data/'
+    location = path+'/'+"Analysis.csv"
+    files = os.path.join(location)
+    files = glob.glob(files)
+    df = pd.concat(map(pd.read_csv, files), ignore_index=True)
+    df.drop('OPEN_INT', inplace=True, axis=1)
+    df.drop('CLOSE', inplace=True, axis=1)
+    df.drop('%_Price_change', inplace=True, axis=1)
+    df.drop('Quantity/Trades', inplace=True, axis=1)
+    df.drop('OI_Trend', inplace=True, axis=1)
+    sorted_df = df. sort_values(by=["%_OI_change"], ascending=False)
     # location = path + '/Top_Price_Gainers.csv'
     # sorted_df.to_csv(location,index=False)
 
