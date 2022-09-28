@@ -186,9 +186,6 @@ def top_sc(request):
 
     if request.method == 'GET':
         sorted_df = sorted_df.head(5)
-        location_j = path + '/Top_sc.json'
-        sorted_df.to_json(path + '/Top_sc.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-        data = open(path + '/Top_sc.json').read()
-        jsonData = json.loads(data)
-        os.remove(path + '/Top_sc.json') 
+        jsonData = sorted_df.to_json(orient='records')
+        jsonData = json.loads(jsonData) 
         return Response(jsonData)
