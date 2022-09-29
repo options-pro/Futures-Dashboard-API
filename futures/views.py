@@ -1,4 +1,3 @@
-from msvcrt import putch
 from xmlrpc.client import ResponseError
 from django.http import JsonResponse
 from rest_framework.decorators import api_view

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-*zg25j6!2)hjz-i3na7!kk#k@o84+i2@f=2k)!d%q+m2i(!931
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','futures-dashboard-api.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','futures-dashboard-api.herokuapp.com']
 
 
 # Application definition
