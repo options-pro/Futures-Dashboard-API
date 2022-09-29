@@ -19,6 +19,7 @@ from futures import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.home),
     path('tp', views.top_price),
     path('toi', views.top_oi),
     path('tlb', views.top_lb),

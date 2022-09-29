@@ -1,4 +1,6 @@
+from http.client import HTTPResponse
 from xmlrpc.client import ResponseError
+from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -7,6 +9,9 @@ import pandas as pd
 import csv ,operator ,json
 import os
 import glob
+
+def home(request):
+    return HttpResponse("Welcome to the API. Please specify appropriate routes to get values.")
 
 @api_view(['GET'])
 def top_price(request):
@@ -30,20 +35,14 @@ def top_price(request):
     if request.method == 'GET':
         if(value == 'gainers'):
             sorted_df = sorted_df.head(5)
-            location_j = path + '/Top_PriceGainers.json'
-            sorted_df.to_json(path + '/Top_PriceGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-            data = open(path + '/Top_PriceGainers.json').read()
-            jsonData = json.loads(data)
-            os.remove(path + '/Top_PriceGainers.json') 
+            jsonData = sorted_df.to_json(orient='records')
+            jsonData = json.loads(jsonData)  
             return Response(jsonData)
         elif(value == 'losers'):
             sorted_df = sorted_df.tail(5)
             sorted_df = sorted_df.loc[::-1]
-            location_j = path + '/Top_PriceLosers.json'
-            sorted_df.to_json(path + '/Top_PriceLosers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-            data = open(path + '/Top_PriceLosers.json').read()
-            jsonData = json.loads(data)
-            os.remove(path + '/Top_PriceLosers.json') 
+            jsonData = sorted_df.to_json(orient='records')
+            jsonData = json.loads(jsonData)  
             return Response(jsonData)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -70,20 +69,14 @@ def top_oi(request):
     if request.method == 'GET':
         if(value == 'gainers'):
             sorted_df = sorted_df.head(5)
-            location_j = path + '/Top_OIGainers.json'
-            sorted_df.to_json(path + '/Top_OIGainers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-            data = open(path + '/Top_OIGainers.json').read()
-            jsonData = json.loads(data)
-            os.remove(path + '/Top_OIGainers.json') 
+            jsonData = sorted_df.to_json(orient='records')
+            jsonData = json.loads(jsonData)  
             return Response(jsonData)
         elif(value == 'losers'):
             sorted_df = sorted_df.tail(5)
             sorted_df = sorted_df.loc[::-1]
-            location_j = path + '/Top_OILosers.json'
-            sorted_df.to_json(path + '/Top_OILosers.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-            data = open(path + '/Top_OILosers.json').read()
-            jsonData = json.loads(data)
-            os.remove(path + '/Top_OILosers.json') 
+            jsonData = sorted_df.to_json(orient='records')
+            jsonData = json.loads(jsonData) 
             return Response(jsonData)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -107,11 +100,8 @@ def top_lb(request):
 
     if request.method == 'GET':
         sorted_df = sorted_df.head(5)
-        location_j = path + '/Top_lb.json'
-        sorted_df.to_json(path + '/Top_lb.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-        data = open(path + '/Top_lb.json').read()
-        jsonData = json.loads(data)
-        os.remove(path + '/Top_lb.json') 
+        jsonData = sorted_df.to_json(orient='records')
+        jsonData = json.loads(jsonData) 
         return Response(jsonData)
 
 @api_view(['GET'])
@@ -133,11 +123,8 @@ def top_lc(request):
 
     if request.method == 'GET':
         sorted_df = sorted_df.head(5)
-        location_j = path + '/Top_lc.json'
-        sorted_df.to_json(path + '/Top_lc.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-        data = open(path + '/Top_lc.json').read()
-        jsonData = json.loads(data)
-        os.remove(path + '/Top_lc.json') 
+        jsonData = sorted_df.to_json(orient='records')
+        jsonData = json.loads(jsonData)  
         return Response(jsonData)
 
 @api_view(['GET'])
@@ -159,11 +146,8 @@ def top_sb(request):
 
     if request.method == 'GET':
         sorted_df = sorted_df.head(5)
-        location_j = path + '/Top_sb.json'
-        sorted_df.to_json(path + '/Top_sb.json', orient = "records", date_format = "epoch", double_precision = 10, force_ascii = True, date_unit = "ms", default_handler = None)
-        data = open(path + '/Top_sb.json').read()
-        jsonData = json.loads(data)
-        os.remove(path + '/Top_sb.json') 
+        jsonData = sorted_df.to_json(orient='records')
+        jsonData = json.loads(jsonData) 
         return Response(jsonData)
 
 @api_view(['GET'])
