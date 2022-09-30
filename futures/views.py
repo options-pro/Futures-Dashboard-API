@@ -1,7 +1,9 @@
+from asyncio.windows_events import NULL
 from http.client import HTTPResponse
 from xmlrpc.client import ResponseError
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
+from numpy import not_equal
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,12 +16,8 @@ def home(request):
     return HttpResponse("Welcome to the API. Please specify appropriate routes to get values.")
 
 @api_view(['GET'])
-def top_price(request):
+def top_price(request, value):
 
-    if request.GET.get("value", None) is not None :
-        value = request.GET.get('value')
-    else:
-        value = ''
     path = os.getcwd() + '/Data/'
     location = path+'/'+"Analysis.csv"
     files = os.path.join(location)
@@ -48,12 +46,8 @@ def top_price(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def top_oi(request):
+def top_oi(request, value):
 
-    if request.GET.get("value", None) is not None :
-        value = request.GET.get('value')
-    else:
-        value = ''
     path = os.getcwd() + '/Data/'
     location = path+'/'+"Analysis.csv"
     files = os.path.join(location)
