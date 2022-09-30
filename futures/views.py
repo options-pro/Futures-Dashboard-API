@@ -1,9 +1,7 @@
-from asyncio.windows_events import NULL
 from http.client import HTTPResponse
 from xmlrpc.client import ResponseError
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
-from numpy import not_equal
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
